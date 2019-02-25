@@ -24,13 +24,9 @@ string prepare(const string & s)
 
 	if(!isalpha(*(--result.end())))
 		result.pop_back();
+	if(!isalpha(*(result.begin())))
+		result = result.erase(0, 1);
 
-/*
-	Does it work faster?
-
-	if(isupper(*(result.begin()))) // possible to optimize as *(s.begin())) <==> s[0]
-	*(result.begin()) = tolower(result.begin());
-*/
 	return result;
 }
 
@@ -43,8 +39,15 @@ static bool CompareV(Statistics & s1, Statistics & s2)
 int main()
 {
 	ifstream file("lyrics.txt");
+	
 	if(file.is_open())
 	{
+		if(file.peek() == EOF)
+		{
+			cout << "File is empty" << endl;
+			return 0;
+		}
+
 		int counter = 0;
 		string word;
 		vector<Statistics> V;
@@ -73,8 +76,9 @@ int main()
 			cout << temp.word << "  :  " << temp.amount << endl;
 	}
 	else
-		cout << "File hasn't opened:(" < endl;
+		cout << "File hasn't opened:(" << endl;
+
+	file.close();
 	
   	return 0;
 }
-
