@@ -49,26 +49,18 @@ int main()
                     if(event.mouseButton.button  == Mouse::Left)
                     {
                         CalculateForce(window, forward_points, backward_points, centres_negative, centres_positive);
-                        /*for(int i = 0; i < 10; i++)
-                        {
-                            sf::CircleShape circle(RADIUS);
-                            //sf::CircleShape circle2(RADIUS);
-                            circle.setFillColor(sf::Color::White);
-                            //circle2.setFillColor(sf::Color::Green);
-                            circle.setPosition(forward_points[i].position.x , forward_points[i].position.y);
-                            //circle2.setPosition(forward_points[1].position.x , forward_points[1].position.y);
-                            /*circle.setPosition(backward_points[0].position.x , backward_points[0].position.y);
-                            circle2.setPosition(backward_points[1].position.x , backward_points[1].position.y);*//*
-                            charges1.push_back(circle);
-                        }*/
-                        sf::CircleShape circle(RADIUS);
-                        sf::CircleShape circle2(RADIUS);
+                        sf::CircleShape circle(POINT_RADIUS);
                         circle.setFillColor(sf::Color::White);
-                        circle2.setFillColor(sf::Color::Green);
                         circle.setPosition(forward_points[0].position.x , forward_points[0].position.y);
-                        circle2.setPosition(forward_points[1].position.x , forward_points[1].position.y);
                         charges1.push_back(circle);
-                        charges2.push_back(circle2);
+
+                        for(int i = 1; i < forward_points.size(); i ++)
+                        {
+                            sf::CircleShape circle2(POINT_RADIUS);
+                            circle2.setFillColor(sf::Color::Green);
+                            circle2.setPosition(forward_points[i].position.x , forward_points[i].position.y);
+                            charges2.push_back(circle2);
+                        }
                     }
                     break;
             }
