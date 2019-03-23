@@ -41,32 +41,56 @@ void CalculateForce(sf::RenderWindow& window,																	\
 	point.position.x = mousePosition.x;
 	point.position.y = mousePosition.y;
 	forward_points.push_back(point);
+	backward_points.push_back(point);
 
-	float ForceX = 0;
-	float ForceY = 0;
-	if(centres_positive.size() != 0)
+	for(int i = 0, end = 0; end == 0; i++)
 	{
-		for (int i = 0; i < centres_positive.size(); ++i)
+		float ForceX = 0;
+		float ForceY = 0;
+		float Rad = 0;
+		if(centres_positive.size() != 0)
 		{
-			ForceX += 1 / (mousePosition.x - centres_positive[i].position.x);
-			ForceY += 1 / (mousePosition.y - centres_positive[i].position.y);
+			for (int j = 0; j < centres_positive.size(); j++)
+			{
+				Rad = sqrt((forward_points[i].position.x - centres_positive[j].position.x) * (forward_points[i].position.x - centres_positive[j].position.x) +\
+						(forward_points[i].position.y - centres_positive[j].position.y) * (forward_points[i].position.y - centres_positive[j].position.y));
+				ForceX += (forward_points[i].position.x - centres_positive[j].position.x) / (Rad * Rad);
+				ForceY += (forward_points[i].position.y - centres_positive[j].position.y) / (Rad * Rad);
+			}
 		}
-	}
-	if(centres_negative.size() != 0)
-	{
-		for (int i = 0; i < centres_negative.size(); ++i)
+		if(centres_negative.size() != 0)
 		{
-			ForceX += 1 / (centres_negative[i].position.x - mousePosition.x);
-			ForceY += 1 / (centres_negative[i].position.y - mousePosition.y);
+			for (int j = 0; j < centres_negative.size(); j++)
+			{
+				Rad = sqrt((forward_points[i].position.x - centres_negative[j].position.x) * (forward_points[i].position.x - centres_negative[j].position.x) +\
+						(forward_points[i].position.y - centres_negative[j].position.y) * (forward_points[i].position.y - centres_negative[j].position.y));
+				ForceX += (centres_negative[j].position.x - forward_points[i].position.x) / (Rad * Rad);
+				ForceY += (centres_negative[j].position.y - forward_points[i].position.y) / (Rad * Rad);
+			}
 		}
+
+		sf::Vertex point2; 
+		point2.position.x = forward_points[i].position.x + STEP * ForceX;
+		point2.position.y = forward_points[i].position.y + STEP * ForceY;
+		forward_points.push_back(point2);
+
+		for(int k = 0; k < centres_negative.size(); k++)
+			if(abs(forward_points[i].position.x - centres_negative[k].position.x) < RADIUS\
+				 && abs(forward_points[i].position.y - centres_negative[k].position.y) < RADIUS)
+				end++;
+
+		sf::Vertex back_point; 
+		back_point.position.x = backward_points[i].position.x + STEP * ForceX;
+		back_point.position.y = backward_points[i].position.y + STEP * ForceY;
+		backward_points.push_back(back_point);
+
+		for(int k = 0; k < centres_positive.size(); k++)
+			if(abs(backward_points[i].position.x - centres_positive[k].position.x) < RADIUS\
+				 && abs(backward_points[i].position.y - centres_positive[k].position.y) < RADIUS)
+				end++;
 	}
-
-	sf::Vertex point2; 
-	point2.position.x = mousePosition.x + STEP * ForceX;
-	point2.position.y = mousePosition.y + STEP * ForceY;
-	forward_points.push_back(point2);
-
-	//return;
+	
+	return;
 }
 
 void CreateLine()
