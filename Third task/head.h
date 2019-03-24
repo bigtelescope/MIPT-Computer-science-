@@ -1,4 +1,4 @@
-#ifndef HEADE_H_
+#ifndef HEAD_H_
 #define HEAD_H_
 
 #include <SFML/Graphics.hpp>
